@@ -50,7 +50,7 @@ func NewChecker(opts ...Option) *Checker {
 	}
 }
 
-// Check executes all of teh checks and returns a sorted list of results.
+// Check executes all of the checks and returns a sorted list of results.
 func (c *Checker) Check(ctx context.Context) []Result {
 	var cancel context.CancelFunc
 	ctx, cancel = context.WithTimeout(ctx, c.timeout)
