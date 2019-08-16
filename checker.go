@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Option is a function for customizing the checker.
 type Option func(*options)
 
 type options struct {
@@ -27,11 +28,13 @@ func WithTimeout(timeout time.Duration) Option {
 	}
 }
 
+// Checker executes multiple checks in parallel and returns the list of results.
 type Checker struct {
 	checks  []Check
 	timeout time.Duration
 }
 
+// NewChecker constructs a new Checker.
 func NewChecker(opts ...Option) *Checker {
 	opt := &options{
 		timeout: 10 * time.Second,
@@ -47,6 +50,7 @@ func NewChecker(opts ...Option) *Checker {
 	}
 }
 
+// Check executes all of teh checks and returns a sorted list of results.
 func (c *Checker) Check(ctx context.Context) []Result {
 	var cancel context.CancelFunc
 	ctx, cancel = context.WithTimeout(ctx, c.timeout)
