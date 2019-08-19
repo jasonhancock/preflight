@@ -1,6 +1,9 @@
 package preflight
 
-import "context"
+import (
+	"context"
+	"strings"
+)
 
 // statuses
 const (
@@ -8,6 +11,7 @@ const (
 	StatusGreen
 	StatusYellow
 	StatusRed
+	StatusUnknown
 )
 
 // Check defines the interface all preflight checks must expose.
@@ -36,5 +40,19 @@ func less(data []Result) func(i, j int) bool {
 			return data[i].Name < data[j].Name
 		}
 		return data[i].Status > data[j].Status
+	}
+}
+
+// ConvertStatusString converts a string ("red"/"yellow"/"green") into the status code.
+func ConvertStatusString(color string) int {
+	switch strings.ToLower(color) {
+	case "green":
+		return StatusGreen
+	case "yellow":
+		return StatusYellow
+	case "red":
+		return StatusRed
+	default:
+		return StatusUnknown
 	}
 }
