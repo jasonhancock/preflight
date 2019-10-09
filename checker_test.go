@@ -11,12 +11,14 @@ import (
 func TestChecker(t *testing.T) {
 	gimmieCheck := func(status int, name, message string, sleep time.Duration) *CheckMock {
 		return &CheckMock{
-			CheckFunc: func(ctx context.Context) Result {
+			CheckFunc: func(ctx context.Context) []Result {
 				time.Sleep(sleep)
-				return Result{
-					Status:  status,
-					Name:    name,
-					Message: message,
+				return []Result{
+					{
+						Status:  status,
+						Name:    name,
+						Message: message,
+					},
 				}
 			},
 			NameFunc: func() string {

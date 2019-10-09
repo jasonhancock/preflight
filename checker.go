@@ -60,7 +60,7 @@ func (c *Checker) Check(ctx context.Context) []Result {
 
 	type namedResult struct {
 		name   string
-		result Result
+		result []Result
 	}
 
 	timedout := make(map[string]struct{}, len(c.checks))
@@ -94,7 +94,7 @@ func (c *Checker) Check(ctx context.Context) []Result {
 			}
 			break
 		case r := <-res:
-			results = append(results, r.result)
+			results = append(results, r.result...)
 			delete(timedout, r.name)
 		}
 	}

@@ -69,9 +69,9 @@ func TestAWSSESVerificationStatusCheck(t *testing.T) {
 			check := NewAWSSESVerificationStatusCheck(svc, addr)
 			result := check.Check(context.Background())
 
-			require.Equal(t, tt.expected.Name, result.Name)
-			require.Equal(t, tt.expected.Status, result.Status)
-			require.Equal(t, tt.expected.Message, result.Message)
+			require.Equal(t, tt.expected.Name, result[0].Name)
+			require.Equal(t, tt.expected.Status, result[0].Status)
+			require.Equal(t, tt.expected.Message, result[0].Message)
 		})
 	}
 }
@@ -108,9 +108,9 @@ func TestAWSSESAccountSendingEnabledCheck(t *testing.T) {
 			check := NewAWSSESAccountSendingEnabledCheck(svc)
 			result := check.Check(context.Background())
 
-			require.Equal(t, tt.expected.Name, result.Name)
-			require.Equal(t, tt.expected.Status, result.Status)
-			require.Equal(t, tt.expected.Message, result.Message)
+			require.Equal(t, tt.expected.Name, result[0].Name)
+			require.Equal(t, tt.expected.Status, result[0].Status)
+			require.Equal(t, tt.expected.Message, result[0].Message)
 		})
 	}
 }
