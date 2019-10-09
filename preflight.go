@@ -18,8 +18,8 @@ const (
 type Check interface {
 	// Name should return a unique name for this check.
 	Name() string
-	// Check should execute the check and return the Result.
-	Check(ctx context.Context) Result
+	// Check should execute the check and return a list of Results.
+	Check(ctx context.Context) []Result
 }
 
 // Result represents the result of a check.

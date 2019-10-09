@@ -33,7 +33,7 @@ func (c *AWSSESVerificationStatusCheck) Name() string {
 }
 
 // Check executes the check.
-func (c *AWSSESVerificationStatusCheck) Check(ctx context.Context) preflight.Result {
+func (c *AWSSESVerificationStatusCheck) Check(ctx context.Context) []preflight.Result {
 	in := &ses.GetIdentityVerificationAttributesInput{
 		Identities: []*string{&c.address},
 	}
@@ -41,12 +41,13 @@ func (c *AWSSESVerificationStatusCheck) Check(ctx context.Context) preflight.Res
 	result := preflight.Result{
 		Name: c.Name(),
 	}
+	var results []preflight.Result
 
 	out, err := c.svc.GetIdentityVerificationAttributesWithContext(ctx, in)
 	if err != nil {
 		result.Message = err.Error()
 		result.Status = preflight.StatusRed
-		return result
+		return append(results, result)
 	}
 
 	attrs, ok := out.VerificationAttributes[c.address]
@@ -61,7 +62,7 @@ func (c *AWSSESVerificationStatusCheck) Check(ctx context.Context) preflight.Res
 		result.Message = "Address has been verified."
 	}
 
-	return result
+	return append(results, result)
 }
 
 // AWSSESAccountSendingEnabledCheck is a preflight.Check that looks at whether or
@@ -85,7 +86,7 @@ func (c *AWSSESAccountSendingEnabledCheck) Name() string {
 }
 
 // Check executes the check.
-func (c *AWSSESAccountSendingEnabledCheck) Check(ctx context.Context) preflight.Result {
+func (c *AWSSESAccountSendingEnabledCheck) Check(ctx context.Context) []preflight.Result {
 	in := &ses.GetAccountSendingEnabledInput{}
 
 	result := preflight.Result{
@@ -93,12 +94,13 @@ func (c *AWSSESAccountSendingEnabledCheck) Check(ctx context.Context) preflight.
 		Message: "Sending has been enabled.",
 		Status:  preflight.StatusGreen,
 	}
+	var results []preflight.Result
 
 	out, err := c.svc.GetAccountSendingEnabledWithContext(ctx, in)
 	if err != nil {
 		result.Message = err.Error()
 		result.Status = preflight.StatusRed
-		return result
+		return append(results, result)
 	}
 
 	if !*out.Enabled {
@@ -106,5 +108,5 @@ func (c *AWSSESAccountSendingEnabledCheck) Check(ctx context.Context) preflight.
 		result.Status = preflight.StatusRed
 	}
 
-	return result
+	return append(results, result)
 }

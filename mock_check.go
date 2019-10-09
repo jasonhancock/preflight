@@ -23,7 +23,7 @@ var _ Check = &CheckMock{}
 //
 //         // make and configure a mocked Check
 //         mockedCheck := &CheckMock{
-//             CheckFunc: func(ctx context.Context) Result {
+//             CheckFunc: func(ctx context.Context) []Result {
 // 	               panic("mock out the Check method")
 //             },
 //             NameFunc: func() string {
@@ -37,7 +37,7 @@ var _ Check = &CheckMock{}
 //     }
 type CheckMock struct {
 	// CheckFunc mocks the Check method.
-	CheckFunc func(ctx context.Context) Result
+	CheckFunc func(ctx context.Context) []Result
 
 	// NameFunc mocks the Name method.
 	NameFunc func() string
@@ -56,7 +56,7 @@ type CheckMock struct {
 }
 
 // Check calls CheckFunc.
-func (mock *CheckMock) Check(ctx context.Context) Result {
+func (mock *CheckMock) Check(ctx context.Context) []Result {
 	if mock.CheckFunc == nil {
 		panic("CheckMock.CheckFunc: method is nil but Check.Check was just called")
 	}
