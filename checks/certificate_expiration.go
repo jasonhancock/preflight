@@ -16,6 +16,8 @@ type CertExpirationCheck struct {
 	red        time.Time
 }
 
+var _ preflight.Check = (*CertExpirationCheck)(nil)
+
 // NewCertExpirationCheck initializes a CertExpirationCheck. name is used in the
 // result. threshYellow is when to start alerting a yellow status. threshRed is
 // when to start alerting a red status.
@@ -34,7 +36,7 @@ func (c *CertExpirationCheck) Name() string {
 }
 
 // Check runs the expiration check.
-func (c *CertExpirationCheck) Check(ctx context.Context) preflight.Result {
+func (c *CertExpirationCheck) Check(ctx context.Context) []preflight.Result {
 	status := preflight.StatusGreen
 	if time.Now().After(c.yellow) {
 		status = preflight.StatusYellow
@@ -43,9 +45,11 @@ func (c *CertExpirationCheck) Check(ctx context.Context) preflight.Result {
 		status = preflight.StatusRed
 	}
 
-	return preflight.Result{
-		Name:    c.name + " - Cert expiration",
-		Message: "cert expires at " + c.expiration.String(),
-		Status:  status,
+	return []preflight.Result{
+		{
+			Name:    c.name + " - Cert expiration",
+			Message: "cert expires at " + c.expiration.String(),
+			Status:  status,
+		},
 	}
 }
